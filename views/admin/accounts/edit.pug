@@ -1,0 +1,75 @@
+extends ../layouts/default
+include ../mixins/alert
+
+block main
+  +alert-error(5000)
+  +alert-success(5000)
+
+  .container.mt-4
+    .row.justify-content-center
+      .col-md-8
+        .card.shadow-sm
+
+          // ===== HEADER =====
+          .card-header.bg-primary.text-white
+            h5.mb-0
+              i.fas.fa-user-edit.mr-2
+              | Chỉnh sửa thông tin người dùng
+
+          // ===== BODY =====
+          .card-body
+            form(method="POST" action=`/admin/accounts/${user._id}?_method=PATCH`)
+
+              // ===== FULL NAME =====
+              .form-group
+                label(for="fullName") Họ và tên
+                input.form-control(
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  value=user.fullName
+                  required
+                )
+
+              // ===== EMAIL =====
+              .form-group
+                label(for="email") Email
+                input.form-control(
+                  type="email"
+                  id="email"
+                  name="email"
+                  value=user.email
+                  required
+                )
+
+              // ===== PHONE =====
+              .form-group
+                label(for="phone") Số điện thoại
+                input.form-control(
+                  type="text"
+                  id="phone"
+                  name="phone"
+                  value=user.phone
+                )
+
+              // ===== STATUS =====
+              .form-group
+                label Trạng thái tài khoản
+                select.form-control(name="status")
+                  option(
+                    value="active"
+                    selected=user.status === 'active'
+                  ) Hoạt động
+                  option(
+                    value="inactive"
+                    selected=user.status === 'inactive'
+                  ) Bị khóa
+
+              // ===== ACTION =====
+              .text-right
+                a.btn.btn-secondary.mr-2(href="/admin/accounts")
+                  i.fas.fa-arrow-left.mr-1
+                  | Quay lại
+                button.btn.btn-success(type="submit")
+                  i.fas.fa-save.mr-1
+                  | Lưu thay đổi

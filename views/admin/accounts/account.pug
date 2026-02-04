@@ -1,0 +1,81 @@
+extends ../layouts/default
+
+block main
+  .container-fluid.mt-4
+    h3.mb-4
+      i.fas.fa-users.mr-2
+      | Danh sách người dùng
+
+    .card.shadow-sm
+      .card-body
+        table.table.table-bordered.table-hover.table-striped
+          thead.thead-dark
+            tr
+              th(style="width: 5%") #
+              th Full Name
+              th Email
+              th Quyền
+              th Phone
+              th Password
+              th(style="width: 15%") Action
+          tbody
+            if accounts.length
+              each account, index in accounts
+                tr
+                  td #{index + 1}
+                  td #{account.fullName}
+                  td #{account.email}
+                  td #{account.role}
+                  td #{account.phone}
+                  td.text-monospace #{account.password}
+
+                  // ===== ACTION =====
+                  td.text-center
+                    // LOCK / UNLOCK
+                    if account.status === 'active'
+                      button.btn.btn-sm.btn-danger.mr-1(
+                        button-change-status
+                        data-status = account.status
+                        data-id = account.id
+                        title="Khóa tài khoản"
+                        onclick=`lockAccount('${account._id}')`
+                      )
+                        i.fas.fa-lock Khóa tài khoản
+                    else
+                      button.btn.btn-sm.btn-success.mr-1(
+                        title="Mở khóa tài khoản"
+                        button-change-status
+                        data-status = account.status
+                        data-id = account.id
+                        onclick=`unlockAccount('${account._id}')`
+                      )
+                        i.fas.fa-unlock Hủy khóa tài khoản
+
+                    // DELETE - Chỉ hiển thị nếu không phải superAdmin tự xóa chính mình
+                    if account.role !== "superAdmin"
+                      button.btn.btn-sm.btn-dark(
+                        button-delete
+                        data-id = account._id
+                        title="Xóa tài khoản"
+                        onclick=`deleteAccount('${account._id}')`
+                      )
+                        i.fas.fa-trash Xóa
+            else
+              tr
+                td(colspan="7").text-center.text-muted
+                  | Không có người dùng nào
+
+
+    form(
+        action="" 
+        method="POST"
+        id="form-change-status"
+        data-part="/admin/accounts/change-status-account"
+    ) 
+
+    form(
+        action="" 
+        method="POST"
+        id="form-delete-account"
+        data-part="/admin/accounts/deleteAccount"
+    )

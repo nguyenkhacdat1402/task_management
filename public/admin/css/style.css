@@ -1,0 +1,92 @@
+.header{
+    background: black;
+    padding: 10px 0;
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+}
+
+.header .inner-logo a{
+    font-size: 24px;
+    font-weight: 700;
+    color: white;
+}
+
+.body .sider{ 
+    width: 150px;
+    background: rgb(59, 57, 57);
+    height: calc(100vh - 56px);
+    position: fixed;
+    top: 56px;
+    left: 0;
+    color: white;
+}
+
+.body .main{
+    margin: 15px;
+    position: relative;
+    left: 150px;
+    width: calc(100% - 180px);
+}
+
+
+.sider .inner-menu ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sider .inner-menu ul li a{
+    color: black;
+    display: block;
+    padding: 6px 10px;
+    border-bottom: 1px solid rgb(9, 7, 7);
+}
+
+[show-alert]{
+    position: fixed;
+    top: 70px;
+    right: 15px;
+    z-index: 9999;
+}
+
+[show-alert].alert-hidden{
+    animation: alert-hidden ;
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+}
+
+@keyframes alert-hidden {
+    form{
+        right: 15px;
+    }
+    to{
+        right: -100px;
+        display: none;
+    }
+}
+
+[show-alert] [close-alert]{
+    background-color: white;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    font-weight: 600;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.image-preview{
+    width: 150px;
+    height: auto;
+    margin-top: 15px;
+    border: 1px solid white;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.image-preview[src=""]{
+    display: none;
+}

@@ -1,0 +1,45 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+  +alert-error(5000)
+  +alert-success(5000)
+
+
+  .create-task-page(style="min-height:100vh; background:linear-gradient(135deg,#f7d4e8,#eac6ff,#d2b5ff); padding:40px 20px;")
+    .container.text-center
+      h1.font-weight-bold(style="color:#7b4fff; font-size:48px;") Tạo Task Mới
+      p(style="color:#444; margin-top:-10px;") Hãy hoàn thành từng việc nhỏ mỗi ngày 💪
+
+      // FORM CREATE TASK
+      form(method="POST" action=`/task/edit/${task.id}?_method=PATCH` style="max-width:550px; margin: 40px auto; background:#fff; padding:25px; border-radius:20px; box-shadow:0 5px 15px rgba(0,0,0,0.1);")
+
+        // Title
+        .form-group.text-left
+            label.font-weight-bold Tên công việc*
+            input.form-control(
+            type="text"
+            name="title"
+            value=task.title
+            required
+            placeholder="Nhập tên công việc"
+            style="padding:10px; border-radius:10px;"
+            )
+
+        // Content
+        .form-group.text-left.mt-3
+            label.font-weight-bold Nội dung công việc*
+            textarea.form-control(
+            name="content"
+            rows="4"
+            required
+            placeholder="Nhập nội dung chi tiết công việc"
+            style="padding:12px; border-radius:12px; resize:none;"
+            )=task.content
+
+        // Submit button
+        button.btn.mt-4(
+            type="submit"
+            style="width:100%; padding:12px; background:linear-gradient(135deg,#b37bff,#a864ff,#9b4dff); color:#fff; font-size:18px; border-radius:12px; border:none; box-shadow:0 4px 10px rgba(0,0,0,0.15); font-weight:600;"
+        ) + Chỉnh sửa
+

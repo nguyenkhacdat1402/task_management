@@ -1,0 +1,33 @@
+extends ../layouts/default
+
+block main
+    .container.mt-4
+        .row.justify-content-center
+            .col-md-6
+                .card.shadow-sm
+                    .card-header.bg-primary.text-white
+                        h5.mb-0 Thông tin tài khoản
+
+                    .card-body
+                        .form-group
+                            label.font-weight-bold Họ và tên
+                            p.form-control-plaintext #{user.fullName}
+
+                        .form-group
+                            label.font-weight-bold Email
+                            p.form-control-plaintext #{user.email}
+
+                        .form-group
+                            label.font-weight-bold Quyền hạn
+                            p.form-control-plaintext.text-capitalize #{user.role}
+
+                        .form-group
+                            label.font-weight-bold Ngày tạo tài khoản
+                            p.form-control-plaintext
+                                | #{new Date(user.createdAt).toLocaleDateString()}
+
+                    .card-footer.text-right
+                        a(
+                            href="/admin/dashboard"
+                            class="btn btn-secondary btn-sm"
+                        ) Quay lại Dashboard

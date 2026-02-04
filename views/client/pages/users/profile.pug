@@ -1,0 +1,57 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+  +alert-error(5000)
+
+  .profile-page(style="background-color: #fff; min-height: 100vh; padding: 40px;")
+    .container
+      h3.mb-4.font-weight-bold.text-dark THÔNG TIN
+
+      .row
+        // LEFT SIDE (Avatar)
+        .col-md-4.text-center
+
+          - const avatar = user.avatar ? user.avatar : 'https://static.vecteezy.com/system/resources/previews/009/734/564/original/default-avatar-profile-icon-of-social-media-user-vector.jpg';
+
+          .avatar-wrapper(style="position: relative; width: 160px; height: 160px; margin: auto;")
+            img.avatar-img(
+              src=avatar
+              alt="User Avatar"
+              style={
+                "width": "120px",
+                "height": "120px",
+                "border-radius": "50%",
+                "object-fit": "cover",
+                "position": "absolute",
+                "top": "50%",
+                "left": "50%",
+                "transform": "translate(-50%, -50%)",
+                "border": "4px solid #fff",
+                "box-shadow": "0 0 8px rgba(0,0,0,0.15)"
+              }
+            )
+
+        // RIGHT SIDE (USER INFO)
+        .col-md-8
+
+          .row.mb-3
+            .col-4.text-muted.font-weight-bold Họ tên*
+            .col-8.text-dark.font-weight-bold #{user.fullName}
+
+          .row.mb-3
+            .col-4.text-muted.font-weight-bold Tên Đăng nhập*
+            .col-8.text-dark.font-weight-bold #{user.email}
+
+          .row.mb-3
+            .col-4.text-muted.font-weight-bold Địa chỉ Email*
+            .col-8.text-dark.font-weight-bold #{user.email}
+
+          .row.mb-3
+            .col-4.text-muted.font-weight-bold Số điện thoại*
+            .col-8.text-dark.font-weight-bold #{user.phone}
+
+          // Nút chỉnh sửa
+          .mt-4
+            a.btn.btn-primary(href="/user/settings" style="padding: 10px 20px; font-weight: 600;")
+              | Chỉnh sửa thông tin

@@ -1,0 +1,50 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+  +alert-error(5000)
+  +alert-success(5000)
+  .settings-page(style="background-color: #fff; min-height: 100vh; padding: 40px;")
+    .container
+      h3.mb-4.font-weight-bold.text-dark CÀI ĐẶT TÀI KHOẢN
+
+      form(method="POST" action="/user/settings?_method=PATCH"  style="max-width: 600px;")
+
+        // Avatar Preview
+        .text-center.mb-4
+          - const avatar = user.avatar ? user.avatar : 'https://static.vecteezy.com/system/resources/previews/009/734/564/original/default-avatar-profile-icon-of-social-media-user-vector.jpg';
+          img#avatarPreview(
+            src=avatar
+            alt="Avatar"
+            style="width:120px; height:120px; border-radius:50%; object-fit:cover; border:4px solid #fff; box-shadow:0 0 8px rgba(0,0,0,0.2);"
+          )
+          br
+          label.btn.btn-secondary.mt-2(for="avatar") Chọn ảnh mới
+          input#avatar(type="file" name="avatar" accept="image/*" style="display:none;")
+
+        // Full Name
+        .form-group.mb-3
+          label.font-weight-bold Họ tên*
+          input.form-control(type="text" name="fullName" required value=user.fullName placeholder="Nhập họ tên")
+
+        // Email (Không cho sửa)
+        .form-group.mb-3
+          label.font-weight-bold Email (không thể thay đổi)
+          input.form-control(type="email" disabled value=user.email style="background:#eee;")
+
+        // Phone
+        .form-group.mb-3
+          label.font-weight-bold Số điện thoại*
+          input.form-control(type="text" name="phone"  value=user.phone placeholder="Nhập số điện thoại")
+
+        // Submit button
+        button.btn.btn-primary.mt-3(type="submit" style="padding:10px 20px; font-weight:600;") Lưu thay đổi
+
+  // SCRIPT: Preview Avatar
+  script.
+    document.getElementById("avatar").addEventListener("change", function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        document.getElementById("avatarPreview").src = URL.createObjectURL(file);
+      }
+    });

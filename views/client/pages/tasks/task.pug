@@ -1,0 +1,202 @@
+extends ../../layouts/default
+
+block main
+  .task-page(
+    style="background: linear-gradient(135deg, #fce4ec 0%, #e1bee7 100%); min-height: 100vh; padding: 40px 0;"
+  )
+    .container
+
+      // HEADER
+      .text-center.mb-5
+        h1.display-4.font-weight-bold(style="color:#7c4dff;") Task Management
+        p.text-muted(style="font-size: 1.1rem;") Không có việc gì khó, chỉ sợ mình không làm 💪
+      
+      if user
+        // ADD TASK BUTTON
+        .row.justify-content-center.mb-4
+          .col-lg-8
+            .card.shadow-sm(style="border:none; border-radius:12px;")
+              .card-body.p-4.text-center
+                a.btn.btn-primary.btn-lg(
+                  href="/task/create"
+                  style="background:linear-gradient(135deg,#a18cd1 0%,#fbc2eb 100%); border:none; padding:15px 50px; border-radius:8px; font-weight:bold;"
+                )
+                  i.fas.fa-plus.mr-2
+                  | Thêm Task Mới
+
+        // FILTER + STATS + SEARCH
+        .row.justify-content-center.mb-4
+          .col-lg-8
+            .d-flex.justify-content-between.align-items-center.flex-wrap
+
+              // STATS
+              .mb-2
+                span.badge.badge-light.mr-2.px-3.py-2
+                  strong(style="color:#ff9800;") #{pendingCount}
+                  |  chưa làm
+                span.badge.badge-light.px-3.py-2
+                  strong(style="color:#4caf50;") #{finishCount}
+                  |  hoàn thành
+
+              // SEARCH FORM
+              form.d-flex.mb-2(method="GET" action="/task" style="max-width:380px; width:100%;")
+                input.form-control(
+                  type="search"
+                  name="keyword"
+                  placeholder="Tìm kiếm task..."
+                  value=keyword
+                  style="border-radius:8px;"
+                )
+                button.btn.btn-primary.ml-2(
+                  type="submit"
+                  style="background:linear-gradient(135deg,#a18cd1,#fbc2eb); border:none; border-radius:8px;"
+                )
+                  i.fas.fa-search
+
+        // FILTER BUTTONS
+        .row.justify-content-center.mb-4
+          .col-lg-8.text-center
+            .btn-group
+              button.btn.btn-sm(
+                onclick='filterTasks("all")'
+                button-status
+                style="background:linear-gradient(135deg,#a18cd1,#fbc2eb); color:white; border:none; padding:8px 20px; font-weight:bold;"
+              )
+                i.fas.fa-list.mr-1
+                | Tất Cả
+
+              button.btn.btn-outline-secondary.btn-sm.ml-2(
+                button-status = "pending"
+                onclick='filterTasks("pending")'
+                style="padding:8px 20px;"
+              )
+                i.fas.fa-clock.mr-1
+                | Chưa Làm
+
+              button.btn.btn-outline-secondary.btn-sm.ml-2(
+                button-status = "finish"
+                onclick='filterTasks("completed")'
+                style="padding:8px 20px;"
+              )
+                i.fas.fa-check.mr-1
+                | Hoàn Thành
+
+
+        // TASK LIST
+        .row.justify-content-center
+          .col-lg-8
+            each item in tasks
+              a(
+                href=`/task/detail/${item._id}`
+                style="text-decoration:none; color:inherit;"
+              )
+                .card.mb-3.shadow-sm.task-item(
+                  data-status=item.status
+                  button-change-status
+                  style="border:none; border-radius:12px; transition:0.3s;"
+                )
+                  .card-body.p-4
+                    .d-flex.align-items-start
+
+                      // ICON
+                      .mr-3
+                        if item.status === "finish"
+                          i.far.fa-check-circle(style="font-size:1.6rem; color:#4caf50;")
+                        else
+                          i.far.fa-clock(style="font-size:1.6rem; color:#ff9800;")
+
+                      // TEXT INFO
+                      .flex-grow-1
+                        h5.mb-2 #{item.title}
+
+                        p.text-muted.small.mb-1
+                          | Được tạo bởi #{item.createBy}
+
+                        -
+                          const createdFormat = new Date(item.createdAt).toLocaleString("vi-VN", { hour12: false });
+
+                        p.text-muted.small
+                          i.far.fa-calendar-alt.mr-1
+                          | #{createdFormat}
+
+                      // BUTTONS
+                      .ml-3
+                        .btn-group
+                          if (item.status == "pending")
+                            button.btn.btn-sm.btn-outline-success.mr-1(
+                              type="button"
+                              button-change-status
+                              data-status= item.status
+                              data-id = item._id
+                              onclick=`event.stopPropagation(); event.preventDefault(); changeStatus("${item._id}")`
+                            )
+                              i.fas.fa-check
+                          else
+                            button.btn.btn-sm.btn-outline-circle.mr-1(
+                              type="button"
+                              button-change-status
+                              data-status=item.status
+                              data-id=item._id
+                              onclick=`event.stopPropagation(); event.preventDefault(); changeStatus("${item._id}")`
+                            )
+                              i.fa-solid.fa-xmark
+
+                          form.delete-task-form(
+                            action=`/task/delete/${item._id}?_method=PATCH`
+                            method="POST"
+                          )
+                            button.btn.btn-sm.btn-outline-danger(type="submit")
+                              i.fas.fa-trash
+
+
+
+        // PAGINATION
+        .row.justify-content-center.mt-4
+          .col-lg-8
+            if objectpagination.totalPages > 1
+              nav(aria-label="Task pagination")
+                ul.pagination.justify-content-center
+
+                  // Previous
+                  li.page-item(class=(objectpagination.curentPages === 1 ? "disabled" : ""))
+                    a.page-link(
+                      href=`/task?page=${objectpagination.curentPages - 1}&keyword=${keyword}`
+                    )
+                      i.fas.fa-chevron-left
+
+                  // Page numbers
+                  each num in [...Array(objectpagination.totalPages).keys()].map(n => n + 1)
+                    li.page-item(class=(num === objectpagination.curentPages ? "active" : ""))
+                      a.page-link(
+                        href=`/task?page=${num}&keyword=${keyword}`
+                      ) #{num}
+
+                  // Next
+                  li.page-item(class=(objectpagination.curentPages === objectpagination.totalPages ? "disabled" : ""))
+                    a.page-link(
+                      href=`/task?page=${objectpagination.curentPages + 1}&keyword=${keyword}`
+                    )
+                      i.fas.fa-chevron-right
+
+
+
+        // FOOTER STATS
+        .text-center.mt-4
+          p.text-muted
+            | 🎉 Bạn đã hoàn thành 
+            strong(style="color:#4caf50;") #{finishCount} việc
+            | , còn 
+            strong(style="color:#ff9800;") #{pendingCount} việc
+            |  chưa làm. Cố lên 💪
+
+      else
+        h3.text-center.mt-5(style="color:#7c4dff;") Vui lòng đăng nhập để sử dụng chức năng quản lý task.
+
+
+    form(
+        action="" 
+        method="POST"
+        id="form-change-status"
+        data-part="/task/change-status"
+    ) 
+

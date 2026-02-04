@@ -1,0 +1,24 @@
+header.header 
+    .container-fluid
+        .row.align-items-center
+            .col-3 
+                .inner-logo
+                    a(href="/admin/dashboard") DASHBOARD
+
+            if user
+                .col-9.text-right
+                    a(
+                        href="/admin/accounts/profile"
+                        class="btn btn-outline-primary btn-sm mr-2"
+                    ) Xin chào #{user.fullName}
+
+                    a(
+                        href="/admin/auth/logout"
+                        class="btn btn-danger btn-sm"
+                    ) Đăng xuất
+            else 
+                .col-9.text-right
+                    a(
+                        href="/admin/auth/login"
+                        class="btn btn-danger btn-sm"
+                    ) Đăng nhập

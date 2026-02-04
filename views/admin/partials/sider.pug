@@ -1,0 +1,13 @@
+if user
+  .sider.bg-light.border-right
+    .inner-menu.p-3
+      ul.nav.flex-column
+        li.nav-item
+          a.nav-link(href="/admin/dashboard") Tổng quan
+        li.nav-item
+          a.nav-link(href="/admin/accounts") Danh sách tài khoản
+        li.nav-item
+          a.nav-link(href="/admin/accounts/create") Tạo tài khoản Admin
+        if role === "superAdmin"
+          li.nav-item
+            a.nav-link(href="/admin/accounts/accountAdmin") Danh sách tài khoản Admin 

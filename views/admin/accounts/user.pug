@@ -1,0 +1,88 @@
+extends ../layouts/default
+include ../mixins/alert.pug
+
+block main
+  +alert-error(5000)
+  +alert-success(5000)
+  .container-fluid.mt-4
+    h3.mb-4
+      i.fas.fa-users.mr-2
+      | Danh sách người dùng
+
+    .card.shadow-sm
+      .card-body
+        table.table.table-bordered.table-hover.table-striped
+          thead.thead-dark
+            tr
+              th(style="width: 5%") #
+              th Full Name
+              th Email
+              th Phone
+              th Password
+              th(style="width: 20%") Action
+          tbody
+            if users.length
+              each user, index in users
+                tr
+                  td #{index + 1}
+                  td #{user.fullName}
+                  td #{user.email}
+                  td #{user.phone}
+                  td.text-monospace #{user.password}
+
+                  // ===== ACTION =====
+                  td.text-center
+                    // EDIT
+                    a.btn.btn-sm.btn-info.mr-1(
+                      href=`/admin/accounts/${user._id}/edit`
+                      title="Chỉnh sửa"
+                    )
+                      i.fas.fa-edit Chỉnh sửa
+
+                    // LOCK / UNLOCK
+                    if user.status === 'active'
+                      button.btn.btn-sm.btn-danger.mr-1(
+                        button-change-status
+                        data-status = user.status
+                        data-id = user.id
+                        title="Khóa tài khoản"
+                        onclick=`lockAccount('${user._id}')`
+                      )
+                        i.fas.fa-lock Khóa tài khoản
+                    else
+                      button.btn.btn-sm.btn-success.mr-1(
+                        title="Mở khóa tài khoản"
+                        button-change-status
+                        data-status = user.status
+                        data-id = user.id
+                        onclick=`unlockAccount('${user._id}')`
+                      )
+                        i.fas.fa-unlock Hủy khóa tài khoản
+
+                    // DELETE
+                    button.btn.btn-sm.btn-dark(
+                      button-delete
+                      data-id = user._id
+                      title="Xóa tài khoản"
+                      onclick=`deleteAccount('${user._id}')`
+                    )
+                      i.fas.fa-trash Xóa
+            else
+              tr
+                td(colspan="6").text-center.text-muted
+                  | Không có người dùng nào
+
+
+    form(
+        action="" 
+        method="POST"
+        id="form-change-status"
+        data-part="/admin/accounts/change-status"
+    )
+    
+    form(
+        action="" 
+        method="POST"
+        id="form-delete-account"
+        data-part="/admin/accounts/delete"
+    )

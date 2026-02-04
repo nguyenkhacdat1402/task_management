@@ -1,0 +1,58 @@
+extends ../layouts/default.pug
+include ../mixins/alert.pug
+
+block main
+  +alert-error(5000)
+  +alert-success(5000)
+
+  .register-page(style='background-color: #f4f4f4; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px;')
+    .container
+      .row.justify-content-center
+        .col-md-5.col-lg-4
+          .card.shadow-sm(style='background-color: white; border: none; border-radius: 8px;')
+            .card-body.p-4
+              //- Header
+              .text-center.mb-4
+                h2.mt-3.mb-2.font-weight-bold.text-dark Create Admin
+              
+              //- Form
+              form(action='/admin/accounts/create' method='POST')
+                //- Fullname
+                .form-group
+                  label.text-dark.font-weight-bold(for='fullName') Full Name
+                  input#fullName.form-control(
+                    type='text'
+                    name='fullName'
+                    placeholder='Enter your full name'
+                    required
+                    style='border: 1px solid #ddd; padding: 12px;'
+                  )
+                //- Email
+                .form-group
+                  label.text-dark.font-weight-bold(for='email') Email
+                  input#email.form-control(
+                    type='email' 
+                    name='email' 
+                    placeholder='Enter your email'
+                    required
+                    style='border: 1px solid #ddd; padding: 12px;'
+                  )
+                
+                //- Password
+                .form-group
+                  label.text-dark.font-weight-bold(for='password') Password
+                  input#password.form-control(
+                    type='password' 
+                    name='password' 
+                    placeholder='Enter your password'
+                    required
+                    style='border: 1px solid #ddd; padding: 12px;'
+                  )
+                  small.form-text.text-muted Minimum 6 characters
+                //- Submit Button
+                button.btn.btn-primary.btn-block.mt-4(
+                  type='submit'
+                  style='padding: 12px; font-weight: bold;'
+                ) Create Account
+
+              
