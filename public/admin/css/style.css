@@ -90,3 +90,14 @@
 .image-preview[src=""]{
     display: none;
 }
+
+.chart-wrapper {
+  position: relative;
+  width: 100%;
+  height: 350px; /* chỉnh cao thấp tùy thích */
+}
+
+.chart-wrapper canvas {
+  width: 100% !important;
+  height: 100% !important;
+}

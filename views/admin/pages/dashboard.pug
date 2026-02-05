@@ -4,68 +4,79 @@ include ../mixins/alert.pug
 block main
   +alert-error(5000)
   +alert-success(5000)
+
   .container-fluid.mt-4
-
-    // ================= USER STATISTIC =================
     .row
-      // TOTAL USER
-      .col-md-4.mb-4
-        .card.border-primary.shadow-sm.h-100
-          .card-body.text-center
-            h5.card-title.text-primary
-              i.fas.fa-users.mr-2
-              | Total Users
-            h2.font-weight-bold #{statistic.user.total}
-            p.text-muted Tổng số người dùng
+      // ===== USER =====
+      .col-lg-6.mb-4
+        h5.text-muted.mb-3 User 
 
-      // ACTIVE USER
-      .col-md-4.mb-4
-        .card.border-success.shadow-sm.h-100
-          .card-body.text-center
-            h5.card-title.text-success
-              i.fas.fa-user-check.mr-2
-              | Active Users
-            h2.font-weight-bold #{statistic.user.active}
-            p.text-muted Người dùng chưa bị ban
+        .row
+          .col-lg-4.col-md-6.mb-3
+            .card.border-primary.shadow-sm.h-100
+              .card-body.text-center
+                h6.text-primary Total Users
+                h3 #{statistic.user.total}
 
-      // BANNED USER
-      .col-md-4.mb-4
-        .card.border-danger.shadow-sm.h-100
-          .card-body.text-center
-            h5.card-title.text-danger
-              i.fas.fa-user-slash.mr-2
-              | Banned Users
-            h2.font-weight-bold #{statistic.user.inactive}
-            p.text-muted Người dùng bị ban
+          .col-lg-4.col-md-6.mb-3
+            .card.border-success.shadow-sm.h-100
+              .card-body.text-center
+                h6.text-success Active
+                h3 #{statistic.user.active}
 
-    // ================= TASK STATISTIC =================
-    .row
-      // TOTAL TASK
-      .col-md-4.mb-4
-        .card.border-info.shadow-sm.h-100
-          .card-body.text-center
-            h5.card-title.text-info
-              i.fas.fa-tasks.mr-2
-              | Total Tasks
-            h2.font-weight-bold #{statistic.task.total}
-            p.text-muted Tổng số task
+          .col-lg-4.col-md-6.mb-3
+            .card.border-danger.shadow-sm.h-100
+              .card-body.text-center
+                h6.text-danger Banned
+                h3 #{statistic.user.inactive}
 
-      // FINISHED TASK
-      .col-md-4.mb-4
-        .card.border-success.shadow-sm.h-100
-          .card-body.text-center
-            h5.card-title.text-success
-              i.fas.fa-check-circle.mr-2
-              | Finished Tasks
-            h2.font-weight-bold #{statistic.task.finish}
-            p.text-muted Task đã hoàn thành
+        .card.shadow-sm.mt-3.h-100
+          .card-body
+            h6.text-center.mb-2 User Status
+            .chart-wrapper
+              canvas#userChart
 
-      // PENDING TASK
-      .col-md-4.mb-4
-        .card.border-warning.shadow-sm.h-100
-          .card-body.text-center
-            h5.card-title.text-warning
-              i.fas.fa-clock.mr-2
-              | Pending Tasks
-            h2.font-weight-bold #{statistic.task.pending}
-            p.text-muted Task đang chờ xử lý
+      // ===== TASK =====
+      .col-lg-6.mb-4
+        h5.text-muted.mb-3 Task
+
+        .row
+          .col-lg-4.col-md-6.mb-3
+            .card.border-info.shadow-sm.h-100
+              .card-body.text-center
+                h6.text-info Total
+                h3 #{statistic.task.total}
+
+          .col-lg-4.col-md-6.mb-3
+            .card.border-success.shadow-sm.h-100
+              .card-body.text-center
+                h6.text-success Finished
+                h3 #{statistic.task.finish}
+
+          .col-lg-4.col-md-6.mb-3
+            .card.border-warning.shadow-sm.h-100
+              .card-body.text-center
+                h6.text-warning Pending
+                h3 #{statistic.task.pending}
+
+        .card.shadow-sm.mt-3.h-100
+          .card-body
+            h6.text-center.mb-2 Task Status
+            .chart-wrapper
+              canvas#taskChart
+
+block pageScripts
+  script.
+    document.addEventListener('DOMContentLoaded', function () {
+      initDashboard({
+        user: {
+          total: !{statistic.user.total},
+          active: !{statistic.user.active},
+          banned: !{statistic.user.inactive}
+        },
+        task: {
+          finished: !{statistic.task.finish},
+          pending: !{statistic.task.pending}
+        }
+      });
+    });
